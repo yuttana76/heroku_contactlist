@@ -84,7 +84,7 @@ app.get("/api/contacts/:id", function(req, res) {
     var updateDoc = req.body;
     //delete updateDoc._id;
   
-    console.log(":doc>>"+ json(updateDoc));
+    console.log(":doc>>"+ JSON.stringify(updateDoc));
     console.log(":id>>"+ updateDoc._id);
     console.log("req.params.id>>"+ req.params.id);
 
