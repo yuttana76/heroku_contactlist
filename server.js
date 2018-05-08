@@ -90,27 +90,21 @@ app.get("/api/contacts/:id", function(req, res) {
 
 
     // Find note and update it with the request body
-    db.collection(CONTACTS_COLLECTION).findByIdAndUpdate(req.params.id, {
-        name: req.body.name ,
-        email: req.body.email
-    }, {new: true})
-    .then(contact => {
-        if(!contact) {
-            return res.status(404).send({
-                message: "Note not found with id " + req.params.id
-            });
+    db.collection(CONTACTS_COLLECTION).findAndModify(
+    {id: req.params.id}, // query
+    [['_id','asc']],  // sort order
+    {$set: {name: updateDoc.name,email:updateDoc.email}}, // replacement, replaces only the field "hi"
+    {}, // options
+    function(err, object) {
+        if (err){
+            console.warn(err.message);  // returns error if no matching object found
+        }else{
+            console.dir(object);
+            updateDoc._id = req.params.id;
+            res.status(200).json(updateDoc);
         }
-        res.send(contact);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Note not found with id " + req.params.id
-            });                
-        }
-        return res.status(500).send({
-            message: "Error updating note with id " + req.params.id
-        });
     });
+
 
     // db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
     //   if (err) {
