@@ -117,10 +117,22 @@ app.get("/api/contacts/:id", function(req, res) {
     //     }
     //  );
 
+    // Method #3
+    // db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, 
+    //         {$set:{name: updateDoc.name,
+    //             email: updateDoc.email
+    //         }},{ upsert: true }, function(err, doc) {
+    //     if (err) {
+    //       handleError(res, err.message, "Failed to update contact");
+    //     } else {
+    //       updateDoc._id = req.params.id;
+    //       res.status(200).json(updateDoc);
+    //     }
+    // });
+
+    // Method #4
     db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, 
-            {$set:{name: updateDoc.name,
-                email: updateDoc.email
-            }},{ upsert: true }, function(err, doc) {
+            {$set:updateDoc},{ upsert: true }, function(err, doc) {
         if (err) {
           handleError(res, err.message, "Failed to update contact");
         } else {
