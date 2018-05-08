@@ -80,11 +80,11 @@ app.get("/api/contacts/:id", function(req, res) {
   app.put("/api/contacts/:id", function(req, res) {
       
     console.log("Welcome PUT Method");
-    
+
     var updateDoc = req.body;
     delete updateDoc._id;
   
-    console.log(":id>>"+ id);
+    console.log(":id>>"+ updateDoc._id);
     console.log("req.params.id>>"+ req.params.id);
 
     db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
