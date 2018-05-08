@@ -118,7 +118,8 @@ app.get("/api/contacts/:id", function(req, res) {
     //  );
 
 
-    db.collection(CONTACTS_COLLECTION).updateOne({id: new ObjectID(req.params.id)}, {
+    db.collection(CONTACTS_COLLECTION).updateOne({id: req.params.id}, 
+            {
                 name: updateDoc.name,
                 email: updateDoc.email
             }, function(err, doc) {
