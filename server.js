@@ -82,9 +82,9 @@ app.get("/api/contacts/:id", function(req, res) {
     console.log("Welcome PUT Method");
 
     var updateDoc = req.body;
-    delete updateDoc._id;
+    //delete updateDoc._id;
   
-    console.log(":doc>>"+ updateDoc);
+    console.log(":doc>>"+ json(updateDoc));
     console.log(":id>>"+ updateDoc._id);
     console.log("req.params.id>>"+ req.params.id);
 
