@@ -88,14 +88,38 @@ app.get("/api/contacts/:id", function(req, res) {
     console.log(":id>>"+ updateDoc._id);
     console.log("req.params.id>>"+ req.params.id);
 
-    db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
-      if (err) {
-        handleError(res, err.message, "Failed to update contact");
-      } else {
-        updateDoc._id = req.params.id;
-        res.status(200).json(updateDoc);
-      }
+
+    // Find note and update it with the request body
+    db.collection(CONTACTS_COLLECTION).findByIdAndUpdate(req.params.id, {
+        name: req.body.name ,
+        email: req.body.email
+    }, {new: true})
+    .then(contact => {
+        if(!contact) {
+            return res.status(404).send({
+                message: "Note not found with id " + req.params.id
+            });
+        }
+        res.send(contact);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "Note not found with id " + req.params.id
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating note with id " + req.params.id
+        });
     });
+
+    // db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+    //   if (err) {
+    //     handleError(res, err.message, "Failed to update contact");
+    //   } else {
+    //     updateDoc._id = req.params.id;
+    //     res.status(200).json(updateDoc);
+    //   }
+    // });
 
     
   });
