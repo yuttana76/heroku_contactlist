@@ -117,10 +117,10 @@ app.get("/api/contacts/:id", function(req, res) {
     //     }
     //  );
 
-    db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, {
-                name: updateDoc.name,
+    db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, 
+            {$set:{name: updateDoc.name,
                 email: updateDoc.email
-            },{ upsert: true }, function(err, doc) {
+            }},{ upsert: true }, function(err, doc) {
         if (err) {
           handleError(res, err.message, "Failed to update contact");
         } else {
