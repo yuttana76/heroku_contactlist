@@ -82,7 +82,7 @@ app.get("/api/contacts/:id", function(req, res) {
     console.log("Welcome PUT Method");
 
     var updateDoc = req.body;
-    //delete updateDoc._id;
+    delete updateDoc._id;
   
     console.log(":doc>>"+ JSON.stringify(updateDoc));
     console.log(":id>>"+ updateDoc._id);
@@ -117,21 +117,24 @@ app.get("/api/contacts/:id", function(req, res) {
     //     }
     //  );
 
-
-    db.collection(CONTACTS_COLLECTION).updateOne({id: req.params.id}, 
-            {
-                name: updateDoc.name,
-                email: updateDoc.email
-            }, function(err, doc) {
-      if (err) {
-        handleError(res, err.message, "Failed to update contact");
-      } else {
-        updateDoc._id = req.params.id;
-        res.status(200).json(updateDoc);
-      }
+    db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+        if (err) {
+          handleError(res, err.message, "Failed to update contact");
+        } else {
+          updateDoc._id = req.params.id;
+          res.status(200).json(updateDoc);
+        }
     });
-
     
+    // db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+    //     if (err) {
+    //       handleError(res, err.message, "Failed to update contact");
+    //     } else {
+    //       updateDoc._id = req.params.id;
+    //       res.status(200).json(updateDoc);
+    //     }
+    //   });
+
   });
   
   app.delete("/api/contacts/:id", function(req, res) {
